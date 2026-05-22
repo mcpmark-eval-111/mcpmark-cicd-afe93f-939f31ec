@@ -380,7 +380,10 @@ jobs:
           test -s "${package_root}/CHECKSUMS.txt"
 
           tar -czf "${artifact_dir}/${package_file}" "${package_root}"
-          sha256sum "${artifact_dir}/${package_file}" | tee "${artifact_dir}/${artifact_name}.sha256"
+          (
+            cd "${artifact_dir}"
+            sha256sum "${package_file}" | tee "${artifact_name}.sha256"
+          )
           artifact_checksum="$(cut -d ' ' -f 1 "${artifact_dir}/${artifact_name}.sha256")"
 
           (cd "${artifact_dir}" && sha256sum -c "${artifact_name}.sha256")
